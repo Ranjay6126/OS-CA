@@ -1,0 +1,61 @@
+HERE IS A SAMPLE CODE THAT IMPLWMENTS THE ABOVE STEPS:
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define TIME_QUANTUM 2
+
+// Process structure
+struct process {
+    int pid;
+    int arrival_time;
+    int burst_time;
+    int priority;
+    int remaining_time;
+};
+// Node structure for the linked list
+struct node {
+    struct process data;
+    struct node* next;
+};
+// Queue structure
+struct queue {
+    struct node* front;
+    struct node* rear;
+};
+// Create a new node
+struct node* createNode(struct process data) {
+    struct node* newNode = (struct node*)malloc(sizeof(struct node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+// Enqueue a process in the queue
+void enqueue(struct queue* q, struct process data) {
+    struct node* newNode = createNode(data);
+    if (q->front == NULL) {
+        q->front = q->rear = newNode;
+        return;
+    }
+    q->rear->next = newNode;
+    q->rear = newNode;
+}
+
+// Dequeue a process from the queue
+struct process dequeue(struct queue* q) {
+    if (q->front == NULL) {
+        struct process empty_process = {-1, -1, -1, -1, -1};
+        return empty_process;
+    }
+    struct node* temp = q->front;
+    struct process data = temp->data;
+    q->front = q->front->next;
+    free(temp);
+    return data;
+}
+// Check if the queue is empty
+int isQueueEmpty(struct queue* q) {
+    return (q->front == NULL);
+}
+// Get the highest priority process from the queue
+struct
